@@ -70,5 +70,24 @@ jobs:
         run: |
              python selector.py
              test -f selected_products.json
-             python -c "import json; data=json.load(open('selected_products.json', encoding='utf-8')); print('Selected products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Selection JSON valid: OK')
-  
+             python - <<'PY'
+             import json
+
+             with open(
+                 "selected_products.json",
+                 "r",
+                 encoding="utf-8"
+             ) as file:
+                 data = json.load(file)
+
+             print("Selected products:", len(data))
+
+    if data:
+        print(
+            "Status:",
+            data[0]["system"]["status"]
+        )
+
+    print("Selection JSON valid: OK")
+    PY
+    
