@@ -1,6 +1,6 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
-
 
 HEADERS = {
     "User-Agent": (
@@ -11,48 +11,70 @@ HEADERS = {
 }
 
 
-def fetch_product_page(url: str) -> str:
+def fetch_product_page(url: str):
     response = requests.get(
         url,
         headers=HEADERS,
-        timeout=20
+        timeout=20,
+        allow_redirects=True
     )
 
     response.raise_for_status()
 
-    return response.text
+    return {
+        "status_code": response.status_code,
+        "final_url": response.url,
+        "content_type": response.headers.get("content-type", ""),
+        "html": response.text
+    }
 
 
 def parse_basic_info(html: str) -> dict:
     soup = BeautifulSoup(html, "lxml")
 
-    title = soup.title.string.strip() if soup.title else ""
+    title = ""
+    if soup.title and soup.title.string:
+        title = soup.title.string.strip()
 
+    description = ""
     description_tag = soup.find(
         "meta",
         attrs={"name": "description"}
     )
 
-    description = ""
-
     if description_tag:
-        description = description_tag.get("content", "").strip()
+        description = description_tag.get(
+            "content",
+            ""
+        ).strip()
 
     return {
         "page_title": title,
-        "page_description": description
+        "page_description": description,
+        "html_length": len(html),
+        "script_count": len(soup.find_all("script"))
     }
 
 
 if __name__ == "__main__":
-    url = input("Enter Shopee product URL: ").strip()
+
+    if len(sys.argv) < 2:
+        print("Usage: python parser.py <shopee_product_url>")
+        sys.exit(1)
+
+    url = sys.argv[1]
 
     try:
-        html = fetch_product_page(url)
-        product_info = parse_basic_info(html)
+        page = fetch_product_page(url)
+        product_info = parse_basic_info(page["html"])
 
-        print("\nProduct Information:")
-        print(product_info)
+        print({
+            "status_code": page["status_code"],
+            "final_url": page["final_url"],
+            "content_type": page["content_type"],
+            **product_info
+        })
 
     except Exception as error:
-        print(f"\nError: {error}")
+        print(f"Error: {error}")
+        sys.exit(1)
