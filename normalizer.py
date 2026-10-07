@@ -1,91 +1,239 @@
-from datetime import datetime
+from datetime import datetime, timezone
+import json
 
 
 def normalize_product(raw_data: dict) -> dict:
-    now = datetime.utcnow().isoformat()
+    now = datetime.now(timezone.utc).isoformat()
 
-    product = {
-        "product_id": str(raw_data.get("product_id", "")),
-        "source": "shopee",
-        "product_url": raw_data.get("product_url", ""),
-        "affiliate_url": raw_data.get("affiliate_url", ""),
+    product = dict(raw_data)
 
-        "product": {
-            "name": raw_data.get("name", ""),
-            "category": raw_data.get("category", ""),
-            "subcategory": raw_data.get("subcategory", ""),
-            "brand": raw_data.get("brand", ""),
-            "description": raw_data.get("description", "")
-        },
+    # Identity
+    product["product_id"] = str(
+        product.get("product_id", "")
+    )
 
-        "commerce": {
-            "price": raw_data.get("price", 0),
-            "original_price": raw_data.get("original_price", 0),
-            "discount": raw_data.get("discount", 0),
-            "currency": raw_data.get("currency", "SGD"),
-            "sold_count": raw_data.get("sold_count", 0),
-            "rating": raw_data.get("rating", 0),
-            "review_count": raw_data.get("review_count", 0),
-            "commission_rate": raw_data.get("commission_rate", 0)
-        },
+    product["source"] = "shopee_affiliate_datafeed"
+    product["market"] = product.get("market", "SG")
 
-        "audience": {
-            "target_customer": raw_data.get("target_customer", ""),
-            "use_case": raw_data.get("use_case", ""),
-            "pain_point": raw_data.get("pain_point", "")
-        },
+    # Product
+    product_data = product.get("product", {})
 
-        "features": raw_data.get("features", []),
-        "benefits": raw_data.get("benefits", []),
-        "selling_points": raw_data.get("selling_points", []),
+    product_data["title"] = str(
+        product_data.get("title", "")
+    ).strip()
 
-        "content": {
-            "hook_angles": raw_data.get("hook_angles", []),
-            "demo_angles": raw_data.get("demo_angles", []),
-            "problem_solution_angles": raw_data.get(
-                "problem_solution_angles", []
-            ),
-            "visual_potential": raw_data.get(
-                "visual_potential", 0
-            ),
-            "viral_potential": raw_data.get(
-                "viral_potential", 0
+    product_data["brand"] = str(
+        product_data.get("brand", "")
+    ).strip()
+
+    product_data["category_l1"] = str(
+        product_data.get("category_l1", "")
+    ).strip()
+
+    product_data["category_l2"] = str(
+        product_data.get("category_l2", "")
+    ).strip()
+
+    product_data["category_l3"] = str(
+        product_data.get("category_l3", "")
+    ).strip()
+
+    product["product"] = product_data
+
+    # Commerce
+    commerce = product.get("commerce", {})
+
+    for field in [
+        "price",
+        "sale_price",
+        "discount_percentage",
+        "item_rating"
+    ]:
+        try:
+            commerce[field] = float(
+                commerce.get(field, 0)
             )
-        },
+        except (TypeError, ValueError):
+            commerce[field] = 0
 
-        "scores": {
-            "demand": 0,
-            "content": 0,
-            "visual": 0,
-            "problem": 0,
-            "impulse": 0,
-            "price": 0,
-            "competition": 0,
-            "total": 0
-        },
+    for field in [
+        "item_sold",
+        "like_count",
+        "stock"
+    ]:
+        try:
+            commerce[field] = int(
+                float(commerce.get(field, 0))
+            )
+        except (TypeError, ValueError):
+            commerce[field] = 0
 
-        "status": "normalized",
-        "created_at": raw_data.get("created_at", now),
-        "updated_at": now
-    }
+    commerce["currency"] = commerce.get(
+        "currency",
+        "SGD"
+    )
+
+    product["commerce"] = commerce
+
+    # Shop
+    shop = product.get("shop", {})
+
+    shop["shop_name"] = str(
+        shop.get("shop_name", "")
+    ).strip()
+
+    shop["seller_name"] = str(
+        shop.get("seller_name", "")
+    ).strip()
+
+    for field in [
+        "shop_rating"
+    ]:
+        try:
+            shop[field] = float(
+                shop.get(field, 0)
+            )
+        except (TypeError, ValueError):
+            shop[field] = 0
+
+    for field in [
+        "shop_sku_count"
+    ]:
+        try:
+            shop[field] = int(
+                float(shop.get(field, 0))
+            )
+        except (TypeError, ValueError):
+            shop[field] = 0
+
+    product["shop"] = shop
+
+    # Attributes
+    attributes = product.get(
+        "attributes",
+        {}
+    )
+
+    if not isinstance(
+        attributes.get(
+            "global_item_attributes",
+            []
+        ),
+        list
+    ):
+        attributes["global_item_attributes"] = []
+
+    if not isinstance(
+        attributes.get("model_ids", []),
+        list
+    ):
+        attributes["model_ids"] = []
+
+    if not isinstance(
+        attributes.get("model_prices", []),
+        list
+    ):
+        attributes["model_prices"] = []
+
+    product["attributes"] = attributes
+
+    # AI Analysis
+    ai_analysis = product.get(
+        "ai_analysis",
+        {}
+    )
+
+    for field in [
+        "benefits",
+        "selling_points",
+        "hook_angles",
+        "demo_angles",
+        "problem_solution_angles"
+    ]:
+        if not isinstance(
+            ai_analysis.get(field, []),
+            list
+        ):
+            ai_analysis[field] = []
+
+    product["ai_analysis"] = ai_analysis
+
+    # Scores
+    scores = product.get(
+        "scores",
+        {}
+    )
+
+    for field in [
+        "demand",
+        "content",
+        "visual",
+        "problem",
+        "impulse",
+        "price",
+        "competition",
+        "total"
+    ]:
+        try:
+            scores[field] = float(
+                scores.get(field, 0)
+            )
+        except (TypeError, ValueError):
+            scores[field] = 0
+
+    product["scores"] = scores
+
+    # System
+    system = product.get(
+        "system",
+        {}
+    )
+
+    system["status"] = "normalized"
+    system["updated_at"] = now
+
+    if not system.get("created_at"):
+        system["created_at"] = now
+
+    product["system"] = system
 
     return product
 
 
 if __name__ == "__main__":
-    test_data = {
-        "product_id": "TEST001",
-        "product_url": "https://shopee.sg/",
-        "name": "Test Product",
-        "category": "Test"
-    }
 
-    result = normalize_product(test_data)
+    with open(
+        "products.json",
+        "r",
+        encoding="utf-8"
+    ) as file:
 
-    import json
+        products = json.load(file)
 
-    print(json.dumps(
-        result,
-        indent=2,
-        ensure_ascii=False
-    ))
+    normalized_products = [
+        normalize_product(product)
+        for product in products
+    ]
+
+    with open(
+        "normalized_products.json",
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            normalized_products,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print("=== NORMALIZER ===")
+    print(
+        "Products normalized:",
+        len(normalized_products)
+    )
+    print(
+        "Output:",
+        "normalized_products.json"
+    )
