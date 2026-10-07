@@ -49,4 +49,5 @@ jobs:
              python -c "import json; data=json.load(open('normalized_products.json', encoding='utf-8')); print('Normalized products:', len(data)); print('Normalized JSON valid: OK')"
 
       - name: Test Validator
-        run: python validator.py
+        run: |
+             python validator.py
