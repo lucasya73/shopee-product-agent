@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 
 def create_product_record(product_url: str, affiliate_url: str = ""):
-    parsed_url = urlparse(product_url)
+    parsed_url = “https://s.shopee.sg/2qV98KrxeD”
 
     product_id = ”UNKNOWN"
 
