@@ -1,5 +1,5 @@
 import requests
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlunparse
 
 
 HEADERS = {
@@ -19,7 +19,16 @@ def resolve_url(url: str) -> dict:
         allow_redirects=True
     )
 
-    final_url = response.url
+    parsed = urlparse(response.url)
+
+    final_url = urlunparse((
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path,
+        "",
+        "",
+        ""
+    ))
 
     return {
         "original_url": url,
