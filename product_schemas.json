@@ -1,44 +1,78 @@
 {
   "product_id": "",
-  "source": "shopee",
-  "product_url": "",
-  "affiliate_url": "",
+  "source": "shopee_affiliate_datafeed",
+  "market": "SG",
+
+  "identity": {
+    "item_id": "",
+    "shop_id": "",
+    "product_url": "",
+    "affiliate_url": ""
+  },
 
   "product": {
-    "name": "",
-    "category": "",
-    "subcategory": "",
+    "title": "",
+    "model_names": "",
+    "description": "",
+    "condition": "",
     "brand": "",
-    "description": ""
+    "category_l1": "",
+    "category_l2": "",
+    "category_l3": "",
+    "category_id_l1": "",
+    "category_id_l2": "",
+    "category_id_l3": ""
   },
 
   "commerce": {
     "price": 0,
-    "original_price": 0,
-    "discount": 0,
-    "currency": "SGD",
-    "sold_count": 0,
-    "rating": 0,
-    "review_count": 0,
-    "commission_rate": 0
+    "sale_price": 0,
+    "discount_percentage": 0,
+    "item_sold": 0,
+    "item_rating": 0,
+    "like_count": 0,
+    "stock": 0,
+    "currency": "SGD"
   },
 
-  "audience": {
+  "shop": {
+    "shop_name": "",
+    "seller_name": "",
+    "shop_rating": 0,
+    "shop_sku_count": 0,
+    "is_official_shop": false,
+    "is_preferred_shop": false,
+    "shopee_verified_flag": "",
+    "has_lowest_price_guarantee": false
+  },
+
+  "media": {
+    "image": "",
+    "image_2": "",
+    "image_3": "",
+    "image_4": "",
+    "image_5": "",
+    "additional_images": []
+  },
+
+  "attributes": {
+    "global_item_attributes": [],
+    "model_ids": [],
+    "model_prices": []
+  },
+
+  "ai_analysis": {
     "target_customer": "",
     "use_case": "",
-    "pain_point": ""
-  },
-
-  "features": [],
-  "benefits": [],
-  "selling_points": [],
-
-  "content": {
+    "pain_point": "",
+    "benefits": [],
+    "selling_points": [],
     "hook_angles": [],
     "demo_angles": [],
     "problem_solution_angles": [],
     "visual_potential": 0,
-    "viral_potential": 0
+    "content_potential": 0,
+    "impulse_potential": 0
   },
 
   "scores": {
@@ -52,7 +86,10 @@
     "total": 0
   },
 
-  "status": "raw",
-  "created_at": "",
-  "updated_at": ""
+  "system": {
+    "status": "raw",
+    "source_file": "",
+    "created_at": "",
+    "updated_at": ""
+  }
 }
