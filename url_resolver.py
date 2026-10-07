@@ -38,23 +38,22 @@ def resolve_url(url: str) -> dict:
 
 
 def extract_product_id(url: str) -> dict:
-    parts = [
-        part
-        for part in urlparse(url).path.split("/")
-        if part
-    ]
+    path = urlparse(url).path.strip("/")
+    parts = path.split("/")
 
     result = {
         "shop_id": "",
         "product_id": ""
     }
 
-    if "product" in parts:
-        index = parts.index("product")
+    if len(parts) >= 3:
+        if parts[0] == "opaanlp":
+            result["shop_id"] = parts[1]
+            result["product_id"] = parts[2]
 
-        if len(parts) > index + 2:
-            result["shop_id"] = parts[index + 1]
-            result["product_id"] = parts[index + 2]
+        elif parts[0] == "product":
+            result["shop_id"] = parts[1]
+            result["product_id"] = parts[2]
 
     return result
 
