@@ -1,0 +1,9 @@
+{
+  "source": "shopee",
+  "market": "SG",
+  "currency": "SGD",
+  "api": {
+    "base_url": "",
+    "enabled": false
+  }
+}
