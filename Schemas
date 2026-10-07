@@ -1,1 +1,128 @@
-
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shopee Product Intelligence Schema",
+  "type": "object",
+  "required": [
+    "product_id",
+    "source",
+    "product_url",
+    "product",
+    "commerce",
+    "audience",
+    "features",
+    "benefits",
+    "selling_points",
+    "content",
+    "scores",
+    "status"
+  ],
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["shopee"]
+    },
+    "product_url": {
+      "type": "string"
+    },
+    "affiliate_url": {
+      "type": "string"
+    },
+    "product": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "category": {"type": "string"},
+        "subcategory": {"type": "string"},
+        "brand": {"type": "string"},
+        "description": {"type": "string"}
+      },
+      "required": ["name", "category"]
+    },
+    "commerce": {
+      "type": "object",
+      "properties": {
+        "price": {"type": "number"},
+        "original_price": {"type": "number"},
+        "discount": {"type": "number"},
+        "currency": {"type": "string"},
+        "sold_count": {"type": "integer"},
+        "rating": {"type": "number"},
+        "review_count": {"type": "integer"},
+        "commission_rate": {"type": "number"}
+      }
+    },
+    "audience": {
+      "type": "object",
+      "properties": {
+        "target_customer": {"type": "string"},
+        "use_case": {"type": "string"},
+        "pain_point": {"type": "string"}
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "benefits": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "selling_points": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "hook_angles": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "demo_angles": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "problem_solution_angles": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "visual_potential": {"type": "number"},
+        "viral_potential": {"type": "number"}
+      }
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "demand": {"type": "number"},
+        "content": {"type": "number"},
+        "visual": {"type": "number"},
+        "problem": {"type": "number"},
+        "impulse": {"type": "number"},
+        "price": {"type": "number"},
+        "competition": {"type": "number"},
+        "total": {"type": "number"}
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "raw",
+        "parsed",
+        "normalized",
+        "validated",
+        "analyzed",
+        "scored",
+        "selected"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    }
+  }
+}
