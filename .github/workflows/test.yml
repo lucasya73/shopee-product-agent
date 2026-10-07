@@ -29,6 +29,9 @@ jobs:
 
       - name: Test URL Resolver
         run: python url_resolver.py "https://s.shopee.sg/2qV98KrxeD"
+
+      - name: Test Parser
+        run: python parser.py "https://shopee.sg/opaanlp/77264859/21692161576"
       
       - name: Test Normalizer
         run: python normalizer.py
