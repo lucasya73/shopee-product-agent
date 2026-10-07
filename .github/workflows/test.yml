@@ -37,8 +37,11 @@ jobs:
         run: python parser.py "https://shopee.sg/opaanlp/77264859/21692161576"
 
       - name: Test CSV Collector
-        run: python csv_collector.py product_feed_test_3rows.csv 3
-  
+        run: |
+             python csv_collector.py product_feed_test_3rows.csv 3
+             test -f products.json
+             python -c "import json; data=json.load(open('products.json', encoding='utf-8')); print('JSON products:', len(data)); print('JSON valid: OK')"
+    
       - name: Test Normalizer
         run: python normalizer.py
 
