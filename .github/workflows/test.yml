@@ -27,6 +27,9 @@ jobs:
       - name: Test Collector
         run: python collector.py "https://shopee.sg/"
 
+      - name: Test URL Resolver
+        run: python url_resolver.py <<EOFhttps://s.shopee.sg/2qV98KrxeDEOF
+      
       - name: Test Normalizer
         run: python normalizer.py
 
