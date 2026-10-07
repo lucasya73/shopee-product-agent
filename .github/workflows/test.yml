@@ -35,7 +35,10 @@ jobs:
 
       - name: Test Parser
         run: python parser.py "https://shopee.sg/opaanlp/77264859/21692161576"
-      
+
+      - name: Test CSV Collector
+        run: python csv_collector.py product_feed_test_3rows.csv 3
+  
       - name: Test Normalizer
         run: python normalizer.py
 
