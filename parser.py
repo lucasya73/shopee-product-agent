@@ -1,36 +1,38 @@
 import sys
-import requests
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/140.0 Safari/537.36"
-    )
-}
+from playwright.sync_api import sync_playwright
 
 
-def fetch_html(url: str) -> str:
-    response = requests.get(
-        url,
-        headers=HEADERS,
-        timeout=20,
-        allow_redirects=True
-    )
-    response.raise_for_status()
-    return response.text
+def fetch_rendered_page(url: str) -> dict:
+    with sync_playwright() as p:
+        browser = p.chromium.launch(
+            headless=True
+        )
 
+        page = browser.new_page(
+            viewport={
+                "width": 1280,
+                "height": 900
+            }
+        )
 
-def find_context(html: str, keyword: str, radius: int = 500) -> str:
-    position = html.lower().find(keyword.lower())
+        page.goto(
+            url,
+            wait_until="domcontentloaded",
+            timeout=60000
+        )
 
-    if position == -1:
-        return ""
+        page.wait_for_timeout(5000)
 
-    start = max(0, position - radius)
-    end = min(len(html), position + len(keyword) + radius)
+        result = {
+            "title": page.title(),
+            "url": page.url,
+            "text_length": len(page.locator("body").inner_text()),
+            "body_text": page.locator("body").inner_text()[:3000]
+        }
 
-    return html[start:end]
+        browser.close()
+
+        return result
 
 
 if __name__ == "__main__":
@@ -42,18 +44,15 @@ if __name__ == "__main__":
     url = sys.argv[1]
 
     try:
-        html = fetch_html(url)
+        result = fetch_rendered_page(url)
 
-        print("HTML LENGTH:", len(html))
+        print("=== PLAYWRIGHT RESULT ===")
+        print("TITLE:", result["title"])
+        print("URL:", result["url"])
+        print("TEXT LENGTH:", result["text_length"])
 
-        print("\n=== PRODUCT CONTEXT ===")
-        print(find_context(html, '"product"', 800))
-
-        print("\n=== NAME CONTEXT ===")
-        print(find_context(html, '"name"', 800))
-
-        print("\n=== PRICE CONTEXT ===")
-        print(find_context(html, '"price"', 800))
+        print("\n=== PAGE TEXT ===")
+        print(result["body_text"])
 
     except Exception as error:
         print(f"Error: {error}")
