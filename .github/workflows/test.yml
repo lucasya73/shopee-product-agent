@@ -65,3 +65,10 @@ jobs:
              python scorer.py
              test -f scored_products.json
              python -c "import json; data=json.load(open('scored_products.json', encoding='utf-8')); print('Scored products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Top score:', data[0]['scores']['total'] if data else 'EMPTY'); print('Scored JSON valid: OK')"
+
+      - name: Test Selector
+        run: |
+             python selector.py
+             test -f selected_products.json
+             python -c "import json; data=json.load(open('selected_products.json', encoding='utf-8')); print('Selected products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Selection JSON valid: OK')
+  
