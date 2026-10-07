@@ -90,4 +90,30 @@ jobs:
 
              print("Selection JSON valid: OK")
              PY
-    
+       
+      - name: Test Content Strategy
+        run: |
+             python content_strategy.py
+             test -f content_strategy.json
+             python - <<'PY'
+             import json
+
+             with open(
+                 "content_strategy.json",
+                 "r",
+                 encoding="utf-8"
+             ) as file:
+                 data = json.load(file)
+
+             print("Strategy products:", len(data))
+
+             if data:
+                 strategy = data[0]["content_strategy"]
+                 print("Status:", data[0]["system"]["status"])
+                 print("Target:", strategy["target_customer"])
+                 print("Hook:", strategy["primary_hook"])
+                 print("Demo:", strategy["primary_demo"])
+                 print("Directions:", len(strategy["content_directions"]))
+
+             print("Content Strategy JSON valid: OK")
+             PY
