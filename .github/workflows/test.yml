@@ -82,12 +82,12 @@ jobs:
 
              print("Selected products:", len(data))
 
-    if data:
-        print(
-            "Status:",
-            data[0]["system"]["status"]
-        )
+             if data:
+                  print(
+                      "Status:",
+                  data[0]["system"]["status"]
+                  )
 
-    print("Selection JSON valid: OK")
-    PY
+             print("Selection JSON valid: OK")
+             PY
     
