@@ -53,6 +53,7 @@ jobs:
              python validator.py
              test -f validated_products.json
              python -c "import json; data=json.load(open('validated_products.json', encoding='utf-8')); print('Validated products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Validated JSON valid: OK')"
+     
       - name: Test Product Intelligence
         run: |
              python product_intelligence.py
