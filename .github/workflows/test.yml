@@ -117,3 +117,30 @@ jobs:
 
              print("Content Strategy JSON valid: OK")
              PY
+
+      - name: Test Content Factory
+        run: |
+             python content_factory.py
+             test -f content_factory.json
+             python - <<'PY'
+             import json
+
+             with open(
+                 "content_factory.json",
+                 "r",
+                 encoding="utf-8"
+             ) as file:
+                 data = json.load(file)
+
+             print("Content products:", len(data))
+
+             if data:
+                 content = data[0]
+                 print("Status:", content["status"])
+                 print("Type:", content["content_type"])
+                 print("Duration:", content["duration"])
+                 print("Aspect ratio:", content["aspect_ratio"])
+                 print("Scenes:", len(content["script"]))
+
+             print("Content Factory JSON valid: OK")
+             PY
