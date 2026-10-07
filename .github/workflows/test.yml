@@ -28,7 +28,10 @@ jobs:
         run: python collector.py "https://shopee.sg/"
 
       - name: Test URL Resolver
-        run: python url_resolver.py <<EOFhttps://s.shopee.sg/2qV98KrxeDEOF
+        run: 
+         python url_resolver.py <<EOF
+         https://s.shopee.sg/2qV98KrxeD
+         EOF
       
       - name: Test Normalizer
         run: python normalizer.py
