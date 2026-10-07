@@ -1,6 +1,5 @@
 import sys
 import requests
-from bs4 import BeautifulSoup
 
 HEADERS = {
     "User-Agent": (
@@ -11,37 +10,27 @@ HEADERS = {
 }
 
 
-def fetch_product_page(url: str):
+def fetch_html(url: str) -> str:
     response = requests.get(
         url,
         headers=HEADERS,
         timeout=20,
         allow_redirects=True
     )
-
     response.raise_for_status()
-
-    return {
-        "status_code": response.status_code,
-        "final_url": response.url,
-        "html": response.text
-    }
+    return response.text
 
 
-def inspect_html(html: str, product_id: str) -> dict:
-    soup = BeautifulSoup(html, "lxml")
+def find_context(html: str, keyword: str, radius: int = 500) -> str:
+    position = html.lower().find(keyword.lower())
 
-    html_lower = html.lower()
+    if position == -1:
+        return ""
 
-    return {
-        "product_id_found": product_id in html,
-        "next_data_found": "__next_data__" in html_lower,
-        "product_keyword_found": "product" in html_lower,
-        "name_keyword_found": '"name"' in html_lower,
-        "price_keyword_found": "price" in html_lower,
-        "html_length": len(html),
-        "script_count": len(soup.find_all("script"))
-    }
+    start = max(0, position - radius)
+    end = min(len(html), position + len(keyword) + radius)
+
+    return html[start:end]
 
 
 if __name__ == "__main__":
@@ -53,18 +42,18 @@ if __name__ == "__main__":
     url = sys.argv[1]
 
     try:
-        page = fetch_product_page(url)
+        html = fetch_html(url)
 
-        result = {
-            "status_code": page["status_code"],
-            "final_url": page["final_url"],
-            **inspect_html(
-                page["html"],
-                "21692161576"
-            )
-        }
+        print("HTML LENGTH:", len(html))
 
-        print(result)
+        print("\n=== PRODUCT CONTEXT ===")
+        print(find_context(html, '"product"', 800))
+
+        print("\n=== NAME CONTEXT ===")
+        print(find_context(html, '"name"', 800))
+
+        print("\n=== PRICE CONTEXT ===")
+        print(find_context(html, '"price"', 800))
 
     except Exception as error:
         print(f"Error: {error}")
