@@ -51,7 +51,13 @@ def extract_product_id(url: str) -> dict:
 
 
 if __name__ == "__main__":
-    url = input("Enter Shopee URL: ").strip()
+    import sys
+
+    if len(sys.argv) < 2:
+        print("Usage: python url_resolver.py <shopee_url>")
+        sys.exit(1)
+
+    url = sys.argv[1]
 
     try:
         resolved = resolve_url(url)
@@ -66,3 +72,4 @@ if __name__ == "__main__":
 
     except Exception as error:
         print(f"Error: {error}")
+        sys.exit(1)
