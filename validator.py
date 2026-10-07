@@ -138,9 +138,8 @@ if __name__ == "__main__":
 
         products = json.load(file)
 
-    valid_count = 0
-    invalid_count = 0
-    all_errors = []
+    valid_products = []
+    invalid_products = []
 
     for product in products:
 
@@ -150,19 +149,32 @@ if __name__ == "__main__":
 
         if result["valid"]:
 
-            valid_count += 1
+            product["system"]["status"] = "validated"
+
+            valid_products.append(product)
 
         else:
 
-            invalid_count += 1
-
-            all_errors.append({
+            invalid_products.append({
                 "product_id": product.get(
                     "product_id",
                     ""
                 ),
                 "errors": result["errors"]
             })
+
+    with open(
+        "validated_products.json",
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            valid_products,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
 
     print("=== VALIDATOR ===")
 
@@ -173,15 +185,20 @@ if __name__ == "__main__":
 
     print(
         "Valid:",
-        valid_count
+        len(valid_products)
     )
 
     print(
         "Invalid:",
-        invalid_count
+        len(invalid_products)
     )
 
-    if all_errors:
+    print(
+        "Output:",
+        "validated_products.json"
+    )
+
+    if invalid_products:
 
         print(
             "\n=== ERRORS ==="
@@ -189,13 +206,12 @@ if __name__ == "__main__":
 
         print(
             json.dumps(
-                all_errors,
+                invalid_products,
                 ensure_ascii=False,
                 indent=2
             )
         )
 
-    if invalid_count > 0:
         raise SystemExit(1)
 
     print(
