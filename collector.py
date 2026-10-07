@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 
 def create_product_record(product_url: str, affiliate_url: str = ""):
 
-    product_id = “UNKNOWN”
+    product_id = "UNKNOWN"
 
     return {
         "product_id": product_id,
