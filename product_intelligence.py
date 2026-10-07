@@ -47,9 +47,14 @@ def build_intelligence(product: dict) -> dict:
         benefits.append("提升居家便利性")
         hook_angles.append("解决居家生活中的实际问题")
 
-    if "beauty" in text or "skin" in text:
-        benefits.append("美容与个人护理")
-        hook_angles.append("改善日常护理体验")
+    if (
+       "beauty" in category_l1
+       or "beauty" in category_l2
+       or "skin care" in category_l2
+       or "skincare" in category_l2
+       ):
+    benefits.append("美容与个人护理")
+    hook_angles.append("改善日常护理体验")
 
     # Product text signals
     if "waterproof" in text:
