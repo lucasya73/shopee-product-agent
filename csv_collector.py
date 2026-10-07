@@ -328,6 +328,21 @@ if __name__ == "__main__":
             limit
         )
 
+        output_file = "products.json"
+
+        with open(
+            output_file,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                products,
+                file,
+                ensure_ascii=False,
+                indent=2
+            )
+
         print(
             "=== CSV COLLECTOR ==="
         )
@@ -335,6 +350,11 @@ if __name__ == "__main__":
         print(
             "Products collected:",
             len(products)
+        )
+
+        print(
+            "Output:",
+            output_file
         )
 
         if products:
@@ -356,5 +376,7 @@ if __name__ == "__main__":
         print(
             f"Error: {error}"
         )
+
+        sys.exit(1)
 
         sys.exit(1)
