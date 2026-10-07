@@ -51,7 +51,7 @@ def build_intelligence(product: dict) -> dict:
        "beauty" in category_l1
        or "beauty" in category_l2
        or "skin care" in category_l2
-       or "skincare" in category_12
+       or "skincare" in category_l2
     ):
        benefits.append("美容与个人护理")
        hook_angles.append("改善日常护理体验")
