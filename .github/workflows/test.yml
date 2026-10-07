@@ -59,3 +59,9 @@ jobs:
              python product_intelligence.py
              test -f intelligence_products.json
              python -c "import json; data=json.load(open('intelligence_products.json', encoding='utf-8')); print('Intelligence products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Intelligence JSON valid: OK')"
+
+      - name: Test Scorer
+        run: |
+             python scorer.py
+             test -f scored_products.json
+             python -c "import json; data=json.load(open('scored_products.json', encoding='utf-8')); print('Scored products:', len(data)); print('Status:', data[0]['system']['status'] if data else 'EMPTY'); print('Top score:', data[0]['scores']['total'] if data else 'EMPTY'); print('Scored JSON valid: OK')"
