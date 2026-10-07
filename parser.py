@@ -24,33 +24,21 @@ def fetch_product_page(url: str):
     return {
         "status_code": response.status_code,
         "final_url": response.url,
-        "content_type": response.headers.get("content-type", ""),
         "html": response.text
     }
 
 
-def parse_basic_info(html: str) -> dict:
+def inspect_html(html: str, product_id: str) -> dict:
     soup = BeautifulSoup(html, "lxml")
 
-    title = ""
-    if soup.title and soup.title.string:
-        title = soup.title.string.strip()
-
-    description = ""
-    description_tag = soup.find(
-        "meta",
-        attrs={"name": "description"}
-    )
-
-    if description_tag:
-        description = description_tag.get(
-            "content",
-            ""
-        ).strip()
+    html_lower = html.lower()
 
     return {
-        "page_title": title,
-        "page_description": description,
+        "product_id_found": product_id in html,
+        "next_data_found": "__next_data__" in html_lower,
+        "product_keyword_found": "product" in html_lower,
+        "name_keyword_found": '"name"' in html_lower,
+        "price_keyword_found": "price" in html_lower,
         "html_length": len(html),
         "script_count": len(soup.find_all("script"))
     }
@@ -66,14 +54,17 @@ if __name__ == "__main__":
 
     try:
         page = fetch_product_page(url)
-        product_info = parse_basic_info(page["html"])
 
-        print({
+        result = {
             "status_code": page["status_code"],
             "final_url": page["final_url"],
-            "content_type": page["content_type"],
-            **product_info
-        })
+            **inspect_html(
+                page["html"],
+                "21692161576"
+            )
+        }
+
+        print(result)
 
     except Exception as error:
         print(f"Error: {error}")
