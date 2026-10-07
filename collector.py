@@ -1,12 +1,14 @@
 import json
+import sys
 from datetime import datetime
+from urllib.parse import urlparse
 
 
-def create_product_record(
-    product_id: str,
-    product_url: str,
-    affiliate_url: str = ""
-):
+def create_product_record(product_url: str, affiliate_url: str = ""):
+    parsed_url = urlparse(product_url)
+
+    product_id = parsed_url.path.strip("/").replace("/", "_") or "UNKNOWN"
+
     return {
         "product_id": product_id,
         "source": "shopee",
@@ -68,10 +70,12 @@ def create_product_record(
 
 
 if __name__ == "__main__":
-    product = create_product_record(
-        product_id="TEST001",
-        product_url="https://shopee.sg/",
-        affiliate_url=""
-    )
+    if len(sys.argv) < 2:
+        print("Usage: python collector.py <shopee_product_url>")
+        sys.exit(1)
+
+    product_url = sys.argv[1]
+
+    product = create_product_record(product_url)
 
     print(json.dumps(product, indent=2, ensure_ascii=False))
