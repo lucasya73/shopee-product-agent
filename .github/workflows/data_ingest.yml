@@ -31,11 +31,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Show Input
+        env:
+          SOURCE_TYPE: ${{ inputs.source_type }}
+          PRODUCT_URL: ${{ inputs.product_url }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           echo "=== DATA INGEST ==="
-          echo "Source type: ${{ inputs.source_type }}"
-          echo "Product URL: ${{ inputs.product_url }}"
 
+          if [ -n "$ISSUE_BODY" ]; then
+            echo "Source: GitHub Issue"
+            echo "Issue Body:"
+            echo "$ISSUE_BODY"
+          else
+            echo "Source type: $SOURCE_TYPE"
+            echo "Product URL: $PRODUCT_URL"
+          fi
+    
       - name: Save Submission
         run: |
           mkdir -p data/inbox
