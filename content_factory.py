@@ -122,4 +122,146 @@ Demonstrate the product clearly in a realistic use scenario.
 Demonstration: {demo}
 Key selling point: {selling_point}
 
-10-
+10-13 seconds:
+Highlight the main product benefit.
+Benefit: {benefit}
+
+13-15 seconds:
+Show the product clearly with a clean final shot.
+Display the price SGD {price} and call to action: {cta}
+
+Visual requirements:
+- Keep the product as the main subject.
+- Preserve the product's actual appearance, packaging, shape and proportions.
+- Use clean backgrounds with minimal visual clutter.
+- Smooth camera movement.
+- Clear product close-ups.
+- No unrelated objects.
+- No exaggerated or unrealistic product claims.
+- No distorted packaging or logos.
+- Vertical 9:16 composition.
+- Total duration: 15 seconds.
+"""
+
+    return prompt.strip()
+
+
+def build_content(product: dict) -> dict:
+    strategy = product.get("content_strategy", {})
+
+    product_images = select_product_images(product)
+
+    product_tags = build_product_tags(
+        product,
+        strategy
+    )
+
+    video_prompt = build_video_prompt(
+        product,
+        strategy
+    )
+
+    return {
+        "product_id": product.get(
+            "product_id",
+            ""
+        ),
+
+        "title": product.get(
+            "product",
+            {}
+        ).get("title", ""),
+
+        "affiliate_url": product.get(
+            "identity",
+            {}
+        ).get("affiliate_url", ""),
+
+        "product_images": product_images,
+
+        "product_tags": product_tags,
+
+        "video_prompt": video_prompt,
+
+        "status": "content_ready"
+    }
+
+
+if __name__ == "__main__":
+
+    with open(
+        "content_strategy.json",
+        "r",
+        encoding="utf-8"
+    ) as file:
+
+        products = json.load(file)
+
+    contents = [
+        build_content(product)
+        for product in products
+    ]
+
+    with open(
+        "content_factory.json",
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            contents,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print("=== CONTENT FACTORY ===")
+
+    print(
+        "Products processed:",
+        len(contents)
+    )
+
+    print(
+        "Output:",
+        "content_factory.json"
+    )
+
+    if contents:
+
+        first = contents[0]
+
+        print(
+            "\n=== FIRST CONTENT ==="
+        )
+
+        print(
+            "Product ID:",
+            first["product_id"]
+        )
+
+        print(
+            "Images:",
+            len(first["product_images"])
+        )
+
+        print(
+            "Tags length:",
+            len(first["product_tags"])
+        )
+
+        print(
+            "Video prompt:",
+            "OK"
+            if first["video_prompt"]
+            else "EMPTY"
+        )
+
+        print(
+            "Status:",
+            first["status"]
+        )
+
+    print(
+        "\nContent Factory: OK"
+    )
