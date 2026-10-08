@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shopee Affiliate OS</title>
+<style>
+:root{--bg:#f7f7f8;--side:#fff;--card:#fff;--text:#171717;--muted:#737373;--line:#e5e5e5;--active:#f0f0f0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Arial,sans-serif}
+.app{display:flex;min-height:100vh}.sidebar{width:220px;background:var(--side);border-right:1px solid var(--line);padding:22px 12px;flex-shrink:0}
+.logo{font-size:17px;font-weight:700;padding:0 10px 22px}.group{margin-bottom:18px}.group-title{font-size:11px;color:#999;padding:0 10px 7px;text-transform:uppercase}.nav{display:block;width:100%;border:0;background:transparent;text-align:left;padding:9px 10px;border-radius:7px;color:#444;cursor:pointer;font-size:13px}.nav:hover,.nav.active{background:var(--active);color:#111;font-weight:600}
+.sidebar-status{border-top:1px solid var(--line);margin-top:20px;padding:16px 10px;color:var(--muted);font-size:11px}.dot{color:#16803c}
+.main{flex:1;min-width:0;padding:24px;max-width:1180px}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.header h1{font-size:20px;margin:0}.header p{margin:4px 0;color:var(--muted)}.status{font-size:12px;color:#16803c}
+.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}.label{color:var(--muted);font-size:12px}.value{font-size:24px;font-weight:700;margin-top:7px}.section{margin-top:18px}.section h2{font-size:15px;margin:0 0 10px}.pipeline{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.node{border:1px solid var(--line);border-radius:8px;padding:11px;background:#fff}.node b{display:block;font-size:12px}.node span{font-size:11px;color:#16803c}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.product{border:1px solid var(--line);border-radius:9px;padding:13px;background:#fff}.product h3{font-size:14px;margin:0 0 5px}.score{font-weight:700;margin-top:7px}
+.images{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.img{height:150px;border:1px solid var(--line);border-radius:8px;background:#f3f3f3;display:flex;align-items:center;justify-content:center;color:#999}.field{margin-top:12px;border:1px solid var(--line);border-radius:9px;background:#fff;padding:12px}.field-head{display:flex;justify-content:space-between;font-weight:600;font-size:13px}.counter{font-size:11px;color:var(--muted);font-weight:400}textarea{width:100%;border:0;outline:0;resize:vertical;font:13px/1.6 Arial;background:transparent;margin-top:8px}.prompt{min-height:190px}.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer;margin-right:6px;margin-top:10px}.btn.primary{background:#111;color:#fff;border-color:#111}
+.table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:9px;overflow:hidden}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}.table th{color:var(--muted);font-weight:500}
+@media(max-width:800px){.sidebar{width:180px}.grid{grid-template-columns:repeat(2,1fr)}.products,.pipeline{grid-template-columns:1fr}.main{padding:16px}}@media(max-width:560px){.sidebar{width:62px;padding:18px 7px}.logo{font-size:0}.logo:after{content:"S";font-size:18px}.group-title,.nav span,.sidebar-status{display:none}.nav{text-align:center;font-size:0}.nav:before{content:"•";font-size:18px}.main{padding:12px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="logo">Shopee Affiliate OS</div>
+<div class="group"><div class="group-title">Overview</div><button class="nav active" data-view="dashboard"><span>Dashboard</span></button><button class="nav" data-view="input"><span>数据入口</span></button></div>
+<div class="group"><div class="group-title">Products</div><button class="nav" data-view="pool"><span>商品池</span></button><button class="nav" data-view="selection"><span>商品筛选</span></button></div>
+<div class="group"><div class="group-title">Content</div><button class="nav" data-view="content"><span>Content Factory</span></button><button class="nav" data-view="video"><span>视频制作</span></button></div>
+<div class="group"><div class="group-title">Operations</div><button class="nav" data-view="publish"><span>发布管理</span></button><button class="nav" data-view="analytics"><span>数据分析</span></button></div>
+<div class="group"><div class="group-title">System</div><button class="nav" data-view="system"><span>系统状态</span></button></div>
+<div class="sidebar-status"><span class="dot">●</span> System Ready</div>
+</aside>
+
+<main class="main">
+<div class="header"><div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Shopee Affiliate 工作台</p></div><div class="status">● READY</div></div>
+
+<section id="dashboard" class="view active">
+<div class="grid"><div class="card"><div class="label">商品总量</div><div class="value">240K+</div></div><div class="card"><div class="label">当前候选</div><div class="value">3</div></div><div class="card"><div class="label">已选商品</div><div class="value">1</div></div><div class="card"><div class="label">Content Ready</div><div class="value">1</div></div></div>
+<div class="section"><h2>Pipeline</h2><div class="pipeline" id="dashPipe"></div></div>
+</section>
+
+
+<section id="input" class="view">
+<div class="card">
+<h2>数据入口</h2>
+<p class="label">提交来源给系统，后台 Pipeline 负责后续处理。</p>
+
+<div class="field">
+<div class="field-head">来源类型</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+<label><input type="radio" name="source" value="datafeed" checked> Shopee Affiliate Datafeed</label>
+<label><input type="radio" name="source" value="csv"> 商品 CSV</label>
+<label><input type="radio" name="source" value="url"> 商品 URL</label>
+<label><input type="radio" name="source" value="other"> 其他来源</label>
+</div>
+</div>
+
+<div class="field">
+<div class="field-head">CSV 文件</div>
+<input id="csvFile" type="file" accept=".csv">
+<p class="label">选择后，文件名称会显示在这里。</p>
+<div id="fileName" class="label">尚未选择文件</div>
+</div>
+
+<div class="field">
+<div class="field-head">商品 URL</div>
+<textarea id="productUrl" style="min-height:70px" placeholder="https://shopee.sg/..."></textarea>
+</div>
+
+<button class="btn primary" id="submitSource" type="button">提交到系统</button>
+<p id="submitStatus" class="label" style="margin-top:10px"></p>
+</div>
+
+<div class="card" style="margin-top:16px">
+<h2>处理流程</h2>
+<div class="pipeline" id="inputPipe"></div>
+</div>
+</section>
+
+<section id="pool" class="view"><div class="card"><h2>商品池</h2><table class="table"><thead><tr><th>Product</th><th>Category</th><th>Sale Price</th><th>Sold</th><th>Rating</th></tr></thead><tbody><tr><td>Holistic Way Vitamin C</td><td>Food Supplement</td><td>SGD 103.50</td><td>103</td><td>4.94</td></tr></tbody></table></div></section>
+
+<section id="selection" class="view"><div class="card"><h2>商品筛选</h2><div class="products"><div class="product"><h3>Holistic Way Vitamin C</h3><div class="label">Selected Product</div><div class="score">Score 56.82</div></div><div class="product"><h3>Carefree Shower Fresh</h3><div class="label">Rank #2</div><div class="score">Score 45.94</div></div><div class="product"><h3>Aveeno Skin Relief</h3><div class="label">Rank #3</div><div class="score">Score 39.38</div></div></div></div></section>
+
+<section id="content" class="view"><div class="card"><h2>Content Factory</h2><p class="label">最终输出：图片 1–3 张 / 标签 ≤150字 / 15秒 Prompt</p><div class="images"><div class="img">Product Image 1</div><div class="img">Product Image 2</div><div class="img">Product Image 3</div></div><div class="field"><div class="field-head">Product Tags <span class="counter">150 / 150</span></div><textarea maxlength="150">Vitamin C｜Food Supplement｜Well Being｜日常健康管理</textarea></div><div class="field"><div class="field-head">15-Second Video Prompt <span class="counter">15s · 9:16</span></div><textarea class="prompt">Create a 15-second vertical 9:16 product promotional video. Show the product clearly with a clean background and realistic UGC product demonstration. Use smooth camera movement, product close-ups, a realistic use scenario, clear benefit presentation and a clean final CTA. Preserve actual packaging, shape and proportions. No exaggerated claims or distorted logos.</textarea></div><button class="btn primary">标记 Content Ready</button></div></section>
+
+<section id="video" class="view"><div class="card"><h2>视频制作</h2><p class="label">人工处理区</p><div class="field"><div class="field-head">产品图片</div><div class="images"><div class="img">图片 1</div><div class="img">图片 2</div><div class="img">图片 3</div></div></div><div class="field"><div class="field-head">视频生成 Prompt</div><textarea class="prompt">从 Content Factory 获取 Prompt 后，在你选择的视频生成工具中生成15秒视频。</textarea></div><button class="btn primary">标记视频已完成</button></div></section>
+
+<section id="publish" class="view"><div class="card"><h2>发布管理</h2><table class="table"><thead><tr><th>Product</th><th>Platform</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>Holistic Way Vitamin C</td><td>Shopee Video</td><td>待发布</td><td><button class="btn">标记已发布</button></td></tr></tbody></table></div></section>
+
+<section id="analytics" class="view"><div class="card"><h2>数据分析</h2><div class="grid"><div class="card"><div class="label">Views</div><div class="value">—</div></div><div class="card"><div class="label">Watch Time</div><div class="value">—</div></div><div class="card"><div class="label">Retention</div><div class="value">—</div></div><div class="card"><div class="label">Shares</div><div class="value">—</div></div></div><div class="field"><div class="field-head">Winner Analysis</div><textarea placeholder="后续回填运营数据并分析"></textarea></div></div></section>
+
+<section id="system" class="view"><div class="card"><h2>系统状态</h2><div class="pipeline" id="systemPipe"></div></div></section>
+</main>
+</div>
+<script>
+const modules=["Datafeed","CSV Collector","Normalizer","Validator","Product Intelligence","Scorer","Selector","Content Strategy","Content Factory"];
+const pipe=modules.map(x=>'<div class="node"><b>'+x+'</b><span>● READY</span></div>').join("");
+document.getElementById("dashPipe").innerHTML=pipe;document.getElementById("systemPipe").innerHTML=pipe;document.getElementById("inputPipe").innerHTML=pipe;
+const titles={dashboard:["Dashboard","Shopee Affiliate 工作台"],input:["数据入口","提交来源给系统"],pool:["商品池","Datafeed 商品数据库"],selection:["商品筛选","AI 商品评分与选择"],content:["Content Factory","人工内容素材工作区"],video:["视频制作","人工视频生成工作区"],publish:["发布管理","内容发布状态"],analytics:["数据分析","运营结果与 Winner 分析"],system:["系统状态","Pipeline 与系统运行状态"]};
+document.querySelectorAll(".nav").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));btn.classList.add("active");const id=btn.dataset.view;document.getElementById(id).classList.add("active");document.getElementById("pageTitle").textContent=titles[id][0];document.getElementById("pageSub").textContent=titles[id][1]}));
+
+const csvFile=document.getElementById("csvFile");
+if(csvFile) csvFile.addEventListener("change",()=>{document.getElementById("fileName").textContent=csvFile.files.length?csvFile.files[0].name:"尚未选择文件"});
+const submitSource=document.getElementById("submitSource");
+if(submitSource) submitSource.addEventListener("click",()=>{
+ const type=document.querySelector('input[name="source"]:checked').value;
+ const hasFile=csvFile.files.length>0;
+ const url=document.getElementById("productUrl").value.trim();
+ if(type==="csv" && !hasFile){document.getElementById("submitStatus").textContent="请选择 CSV 文件";return}
+ if(type==="url" && !url){document.getElementById("submitStatus").textContent="请输入商品 URL";return}
+ document.getElementById("submitStatus").textContent="已建立提交记录，等待连接 GitHub Actions 自动处理。";
+});
+</script>
+</body>
+</html>
