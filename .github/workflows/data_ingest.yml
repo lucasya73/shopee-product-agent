@@ -2,6 +2,9 @@ name: Data Ingest
 
 on:
   workflow_dispatch:
+
+  issues:
+    types: [opened]
     inputs:
       source_type:
         description: "数据来源"
