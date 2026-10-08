@@ -104,12 +104,12 @@ if(submitSource) submitSource.addEventListener("click",()=>{
  const type=document.querySelector('input[name="sourceType"]:checked')?.value;
  const url=document.getElementById("productUrl").value.trim();
 
- if(type==="url" && !url){
+ if(type==="product_url" && !url){
    document.getElementById("submitStatus").textContent="请输入商品 URL";
    return;
  }
 
- if(type!=="url"){
+ if(type!=="product_url"){
    document.getElementById("submitStatus").textContent="当前 MVP 先支持商品网址提交";
    return;
  }
