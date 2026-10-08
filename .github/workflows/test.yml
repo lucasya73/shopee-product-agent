@@ -117,7 +117,6 @@ jobs:
 
              print("Content Strategy JSON valid: OK")
              PY
-
       - name: Test Content Factory
         run: |
              python content_factory.py
@@ -136,11 +135,18 @@ jobs:
 
              if data:
                  content = data[0]
-                 print("Status:", content["status"])
-                 print("Type:", content["content_type"])
-                 print("Duration:", content["duration"])
-                 print("Aspect ratio:", content["aspect_ratio"])
-                 print("Scenes:", len(content["script"]))
 
-             print("Content Factory JSON valid: OK")
+                 print("Status:", content["status"])
+                 print("Images:", len(content["product_images"]))
+                 print("Tags length:", len(content["product_tags"]))
+                 print(
+                     "Video prompt:",
+                     "OK" if content["video_prompt"] else "EMPTY"
+                 )
+
+                 assert 1 <= len(content["product_images"]) <= 3
+                 assert len(content["product_tags"]) <= 150
+                 assert content["video_prompt"]
+
+             print("Content Factory final output: OK")
              PY
