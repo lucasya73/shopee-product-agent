@@ -101,12 +101,31 @@ const csvFile=document.getElementById("csvFile");
 if(csvFile) csvFile.addEventListener("change",()=>{document.getElementById("fileName").textContent=csvFile.files.length?csvFile.files[0].name:"尚未选择文件"});
 const submitSource=document.getElementById("submitSource");
 if(submitSource) submitSource.addEventListener("click",()=>{
- const type=document.querySelector('input[name="source"]:checked').value;
- const hasFile=csvFile.files.length>0;
+ const type=document.querySelector('input[name="sourceType"]:checked')?.value;
  const url=document.getElementById("productUrl").value.trim();
- if(type==="csv" && !hasFile){document.getElementById("submitStatus").textContent="请选择 CSV 文件";return}
- if(type==="url" && !url){document.getElementById("submitStatus").textContent="请输入商品 URL";return}
- document.getElementById("submitStatus").textContent="已建立提交记录，等待连接 GitHub Actions 自动处理。";
+
+ if(type==="url" && !url){
+   document.getElementById("submitStatus").textContent="请输入商品 URL";
+   return;
+ }
+
+ if(type!=="url"){
+   document.getElementById("submitStatus").textContent="当前 MVP 先支持商品网址提交";
+   return;
+ }
+
+ const issueTitle=encodeURIComponent("PRODUCT SUBMISSION");
+ const issueBody=encodeURIComponent(url);
+
+ const issueUrl=
+   "https://github.com/lucasya73/shopee-product-agent/issues/new"
+   +"?title="+issueTitle
+   +"&body="+issueBody;
+
+ document.getElementById("submitStatus").textContent=
+   "正在打开 GitHub 提交页面...";
+
+ window.open(issueUrl,"_blank");
 });
 </script>
 </body>
