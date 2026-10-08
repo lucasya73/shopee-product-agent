@@ -46,18 +46,34 @@ jobs:
             echo "Source type: $SOURCE_TYPE"
             echo "Product URL: $PRODUCT_URL"
           fi
-    
+  
       - name: Save Submission
+        env:
+          SOURCE_TYPE: ${{ inputs.source_type }}
+          PRODUCT_URL: ${{ inputs.product_url }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           mkdir -p data/inbox
 
-          cat > data/inbox/latest_submission.json <<'JSON'
+          if [ -n "$ISSUE_BODY" ]; then
+            cat > data/inbox/latest_submission.json <<JSON
           {
-            "source_type": "${{ inputs.source_type }}",
-            "product_url": "${{ inputs.product_url }}",
+            "source_type": "github_issue",
+            "product_url": "$ISSUE_BODY",
+            "status": "received"
+          }
+           JSON
+          else
+            cat > data/inbox/latest_submission.json <<JSON
+          {
+            "source_type": "$SOURCE_TYPE",
+            "product_url": "$PRODUCT_URL",
             "status": "received"
           }
           JSON
+          fi
+
+          cat data/inbox/latest_submission.json
 
       - name: Verify
         run: |
