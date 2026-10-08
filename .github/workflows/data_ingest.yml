@@ -1,0 +1,50 @@
+name: Data Ingest
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_type:
+        description: "数据来源"
+        required: true
+        type: choice
+        options:
+          - shopee_datafeed
+          - product_csv
+          - product_url
+          - other
+      product_url:
+        description: "商品 URL（如果是商品网址）"
+        required: false
+        type: string
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Input
+        run: |
+          echo "=== DATA INGEST ==="
+          echo "Source type: ${{ inputs.source_type }}"
+          echo "Product URL: ${{ inputs.product_url }}"
+
+      - name: Save Submission
+        run: |
+          mkdir -p data/inbox
+
+          cat > data/inbox/latest_submission.json <<'JSON'
+          {
+            "source_type": "${{ inputs.source_type }}",
+            "product_url": "${{ inputs.product_url }}",
+            "status": "received"
+          }
+          JSON
+
+      - name: Verify
+        run: |
+          test -f data/inbox/latest_submission.json
+          cat data/inbox/latest_submission.json
+          echo "Data Ingest: OK"
